@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <!-- Update Task Form -->
                     {{-- This is called relative route url('update') --}}
-                    <form action="{{ url('update') }}" method="POST">
+                    <form action="{{ url('task/update') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{ $task->id }}">
                         <!-- Task Name -->
@@ -35,7 +35,7 @@
                 </div>
                 <div class="card-body">
                     <!-- New Task Form -->
-                    <form action="create" method="POST">
+                    <form action="task/create" method="POST">
                         @csrf
                         <!-- Task Name -->
                         <div class="mb-3">
@@ -72,13 +72,13 @@
                             <tr>
                                 <td>{{ $task->name }}</td>
                                 <td>
-                                    <form action="/delete/{{ $task->id }}" method="POST" class="d-inline">
+                                    <form action="task/delete/{{ $task->id }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="btn btn-danger">
                                             <i class="fa fa-trash me-2"></i>Delete
                                         </button>
                                     </form>
-                                    <form action="/edit/{{ $task->id }}" method="POST" class="d-inline">
+                                    <form action="task/edit/{{ $task->id }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="btn btn-info">
                                             <i class="fa fa-info me-2"></i>Update

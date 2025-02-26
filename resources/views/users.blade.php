@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <!-- Update User Form -->
                         {{-- This is called relative route url('update') --}}
-                        <form action="{{ url('update') }}" method="POST">
+                        <form action="{{ url('user/update') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id" value="{{ $user->id }}">
                             <!-- User Name -->
@@ -46,7 +46,7 @@
                     </div>
                     <div class="card-body">
                         <!-- New User Form -->
-                        <form action="create" method="POST">
+                        <form action="user/create" method="POST">
                             @csrf
                             <!-- I assumed to add *required* keyword to the input fields as they can't be null in the DB -->
 
@@ -97,13 +97,13 @@
                                 <tr>
                                     <td>{{ $user->name }}</td>
                                     <td>
-                                        <form action="/delete/{{ $user->id }}" method="POST" class="d-inline">
+                                        <form action="user/delete/{{ $user->id }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">
                                                 <i class="fa fa-trash me-2"></i>Delete
                                             </button>
                                         </form>
-                                        <form action="/edit/{{ $user->id }}" method="POST" class="d-inline">
+                                        <form action="user/edit/{{ $user->id }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-info">
                                                 <i class="fa fa-info me-2"></i>Update
