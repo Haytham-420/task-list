@@ -1,97 +1,101 @@
 @extends('layouts.app')
 @section('content')
-<div class="container mt-4">
-    <h1>Task List App</h1>
-    <div class="offset-md-2 col-md-8">
-        <div class="card">
-            @if (isset($task))
-                <div class="card-header">
-                    Update Task
-                </div>
-                <div class="card-body">
-                    <!-- Update Task Form -->
-                    {{-- This is called relative route url('update') --}}
-                    <form action="{{ url('task/update') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $task->id }}">
-                        <!-- Task Name -->
-                        <div class="mb-3">
-                            <label for="task-name" class="form-label">Task</label>
-                            <input type="text" name="name" id="task-name" class="form-control"
-                                value="{{ $task->name }}">
-                        </div>
-
-                        <!-- Update Task Button -->
-                        <div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-plus me-2"></i>Update Task
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            @else
-                <div class="card-header">
-                    New Task
-                </div>
-                <div class="card-body">
-                    <!-- New Task Form -->
-                    <form action="task/create" method="POST">
-                        @csrf
-                        <!-- Task Name -->
-                        <div class="mb-3">
-                            <label for="task-name" class="form-label">Task</label>
-                            <input type="text" name="name" id="task-name" class="form-control" value="">
-                        </div>
-
-                        <!-- Add Task Button -->
-                        <div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-plus me-2"></i>Add Task
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            @endif
-        </div>
-
-        <!-- Current Tasks -->
-        <div class="card mt-4">
-            <div class="card-header">
-                Current Tasks
+    <div class="container mt-4">
+        <h1>Task List App</h1>
+        <div class="offset-md-2 col-md-8">
+            <div class="card">
+                @if (isset($task))
+                    <div class="card-header">
+                        Update Task
+                    </div>
+                    <div class="card-body">
+                        <!-- Update Task Form -->
+                        {{-- This is called relative route url('update') --}}
+                        <form action="{{ url('task/update') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="id" value="{{ $task->id }}">
+                            <!-- Task Name -->
+                            <div class="mb-3">
+                                <label for="task-name" class="form-label">Task</label>
+                                <input type="text" name="name" id="task-name"
+                                    class="form-control @error('name') is-invalid @enderror" value="{{ $task->name }}">
+                            </div>
+                            @error('name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Update Task
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @else
+                    <div class="card-header">
+                        New Task
+                    </div>
+                    <div class="card-body">
+                        <!-- New Task Form -->
+                        <form action="task/create" method="POST">
+                            @csrf
+                            <!-- Task Name -->
+                            <div class="mb-3">
+                                <label for="task-name" class="form-label">Task</label>
+                                <input type="text" name="name" id="task-name"
+                                    class="form-control @error('name') is-invalid @enderror" value="" />
+                            </div>
+                            @error('name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <!-- Add Task Button -->
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus me-2"></i>Add Task
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
             </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($tasks as $task)
+
+            <!-- Current Tasks -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    Current Tasks
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>{{ $task->name }}</td>
-                                <td>
-                                    <form action="task/delete/{{ $task->id }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-trash me-2"></i>Delete
-                                        </button>
-                                    </form>
-                                    <form action="task/edit/{{ $task->id }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-info">
-                                            <i class="fa fa-info me-2"></i>Update
-                                        </button>
-                                    </form>
-                                </td>
+                                <th>Task</th>
+                                <th>Actions</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($tasks as $task)
+                                <tr>
+                                    <td>{{ $task->name }}</td>
+                                    <td>
+                                        <form action="task/delete/{{ $task->id }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                        <form action="task/edit/{{ $task->id }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-info">
+                                                <i class="fa fa-info me-2"></i>Update
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
-

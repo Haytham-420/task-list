@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 
 
@@ -18,17 +20,25 @@ class UserController extends Controller
         return view('users', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $user_name = $_POST['name'];
-        $user_email = $_POST['email'];
-        $user_password = $_POST['password'];
+        $validated = $request->validate([
+            'name' => 'required|max:10',
+            'email' => 'required|email:rfc,dns',
+            'password' => ['required', 'confirmed', Password::min(8)->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()],
+        ]);
+
         // DB::table('users')->insert(['name' => $user_name, 'email' => $user_email, 'password' => $user_password]);
         $user = new User;
-        $user->name = $user_name;
-        $user->email = $user_email;
-        $user->password =  $user_password;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password); // Encrypt the password
         $user->save();
+
         return redirect()->back();
     }
 
@@ -48,11 +58,25 @@ class UserController extends Controller
         return view('users', compact('user', 'users'));
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        $id = $_POST['id'];
-        // DB::table('users')->where('id', $id)->update(['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']]);
-        User::where('id', $id)->update(['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']]);
+        $validated = $request->validate([
+            'name' => 'required|max:10',
+            'email' => 'required|email:rfc,dns',
+            'password' => ['required', 'confirmed', Password::min(8)->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()],
+        ]);
+
+        $id = $request->id;
+        User::where('id', $id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password) // Encrypt the password
+        ]);
+
         return redirect('users');
     }
 }

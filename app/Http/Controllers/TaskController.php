@@ -17,13 +17,17 @@ class TaskController extends Controller
         return view('tasks', compact('tasks'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $task_name = $_POST['name'];
+        $validated = $request->validate([
+            'name'=> 'required|max:15'
+        ]);
+
+        // $task_name = $_POST['name'];
         // DB::table('tasks')->insert(['name' => $task_name]);
         $task = new Task;
         // Note the *name* below is the name of the column in the DB
-        $task->name = $task_name;
+        $task->name =  $request->name;
         // ->save() should be used at the very end after inserting everything
         $task->save();
 
@@ -46,11 +50,16 @@ class TaskController extends Controller
         return view('tasks', compact('task', 'tasks'));
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        $id = $_POST['id'];
+        $validated = $request->validate([
+            'name' => 'required|max:15'
+        ]);
+
+        $id = $request->id;
         // DB::table('tasks')->where('id', $id)->update(['name' => $_POST['name']]);
-        Task::where('id', $id)->update(['name' => $_POST['name']]);
+        // Task::where('id', $id)->update(['name' => $_POST['name']]);
+        Task::where('id', $id)->update(['name' => $request->name]);
         return redirect('tasks');
     }
 }

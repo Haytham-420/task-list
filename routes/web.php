@@ -49,9 +49,9 @@ Route::post('task/create', [TaskController::class, 'create']);
 
 Route::post('task/delete/{id}', [TaskController::class, 'destroy']);
 
-Route::post('task/edit/{id}', [TaskController::class, 'edit']);
+Route::get('task/edit/{id}', [TaskController::class, 'edit']);
 
-Route::post('task/update', [TaskController::class, 'update']);
+Route::put('task/update', [TaskController::class, 'update']);
 
 Route::get('app', function () {
     return view('layouts.app');
@@ -64,6 +64,6 @@ Route::post('user/create', [UserController::class, 'create']);
 
 Route::post('user/delete/{id}', [UserController::class, 'destroy']);
 
-Route::post('user/edit/{id}', [UserController::class, 'edit']);
+Route::get('user/edit/{id}', [UserController::class, 'edit']);
 
-Route::post('user/update', [UserController::class, 'update']);
+Route::put('user/update', [UserController::class, 'update']); // Change to PUT method
